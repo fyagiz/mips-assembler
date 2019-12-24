@@ -2,6 +2,7 @@ from registers import register_table
 from os import _exit as exit
 import sys
 import batch
+import output_generator
 
 
 def main(argv):
@@ -25,6 +26,8 @@ def main(argv):
             elif int(choice) == 2:
                 print("Instruction: ")
                 instruction = input()
+                output_generator.decode(instruction)
+                print(output_generator.output[-1])
             elif int(choice) == 1:
                 print("To be completed!")
             else:
