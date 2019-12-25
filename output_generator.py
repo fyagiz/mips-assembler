@@ -30,7 +30,7 @@ def decode(instructions):
                 if ins_type[0] == "R":
                     r_type_decoder(item, ins_type)
                 elif ins_type[0] == "I":
-                    i_type_decoder(item, ins_type)
+                    i_type_decoder(item, ins_type, idx)
             # If instruction is pseudo instruction.
             elif flag == 2:
                 print("Pseudo!")
@@ -63,7 +63,7 @@ def decode(instructions):
             if ins_type[0] == "R":
                 r_type_decoder(instructions, ins_type)
             elif ins_type[0] == "I":
-                i_type_decoder(instructions, ins_type)
+                i_type_decoder(instructions, ins_type, 0)
         # If instruction is pseudo instruction.
         elif flag == 2:
             print("Pseudo!")
@@ -127,7 +127,7 @@ def r_type_decoder(item, ins_type):
     output.append(final)
 
 # I-Type Instruction Decoder
-def i_type_decoder(item, ins_type):
+def i_type_decoder(item, ins_type, idx):
     get_rid_of_coma(item)
     opcode = ins_type[1]
 
@@ -145,10 +145,30 @@ def i_type_decoder(item, ins_type):
         check_imm(imm)
 
     elif ins_type[2] == 't' and ins_type[3] == 'i16(s)':
-        print("lw")
+        try:
+            t = bin(register_table[item[1]])
+        except KeyboardInterrupt:
+            register_not_found(item[1])
+        temp = item[2].split("(")
+        temp[1] = temp[1].replace(")","")
+        try:
+            s = bin(register_table[temp[1]])
+        except KeyboardInterrupt:
+            register_not_found(temp[1])
+        imm = int(temp[0])
+        check_imm(imm)
 
     elif ins_type[2] == 's' and ins_type[3] == 't':
-        print("beq")
+        try:
+            s = bin(register_table[item[1]])
+        except KeyboardInterrupt:
+            register_not_found(item[1])
+        try:
+            t = bin(register_table[item[2]])
+        except KeyboardInterrupt:
+            register_not_found(item[2])
+        imm = branch_label_handle(item[3], idx)
+        check_imm(imm)
 
     final = binary_handle.i_type(opcode,s,t,imm)
     output.append(final)
@@ -180,6 +200,28 @@ def check_imm(imm):
         print("Immediate must be in {} < imm < {}".format(imm_min, imm_max))
         print("Your immediate: {}".format(imm))
         print("Exiting...")
+        exit(1)
+
+# Auxiliary function to handle branch label is in range or not
+def branch_label_handle(label, idx):
+    # Started location.
+    pc = "0x80001000"
+    # Check label is avialable or not.
+    if label in label_list:
+        # Get Available position of label.
+        id = label_list[label]
+        # Calculate label adress
+        label_adress = int(pc,16) + 4*(id)
+        # Calculate current pc
+        real_pc = int(pc,16) + 4*(idx) + 4
+        # Calculate label adress
+        label_number = int((label_adress - real_pc) / 4)
+        return label_number
+    else:
+        print("Label not found!")
+        print("Your label is {}".format(label))
+        print("Available lable(s) are: ")
+        print(label_list.keys())
         exit(1)
 
 if __name__ == "__main__":
