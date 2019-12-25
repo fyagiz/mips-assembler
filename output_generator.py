@@ -39,7 +39,9 @@ def decode(instructions):
                     exit(1)
             # If instruction is pseudo instruction.
             elif flag == 2:
-                print("Pseudo!")
+                ins_type = pseudo_table[item[0]]
+                ins_type = instruction_table[ins_type[0]]
+                pseudo_handle(item, ins_type, idx)
             # If instruction is not found.
             else:
                 # If the Instruction not found, exit.
@@ -266,5 +268,11 @@ def jump_label_handle(label, idx):
         print(label_list.keys())
         exit(1)
 
+# Auxiliary function to handle pseudo
+def pseudo_handle(item, ins_type, idx):
+    if item[0] == 'move':
+        temp = 'or'+" "+item[1]+" "+item[2]+", "+"$zero"
+        temp = temp.split(" ")
+        r_type_decoder(temp,ins_type)
 if __name__ == "__main__":
     print("Please start assembler.py to start assembler!")
