@@ -7,11 +7,11 @@ import binary_handle
 
 output = list()
 
-def decode(instructions):
+def decode(instructions, mod):
 
     # Check the assembler start batch mod or not.
     # If Is it batch mode this if block will be executed.
-    if type(instructions) is list:
+    if mod == 0:
         # Decode the instructions by one by
         for idx, item in enumerate(instructions):
             flag = 0
@@ -55,7 +55,6 @@ def decode(instructions):
     # Execute these block if the program runs interactive mod.
     else:
         flag = 0
-        instructions = instructions.split(" ")
         get_rid_of_coma(instructions)
         if instructions[0] in instruction_table:
             flag = 1

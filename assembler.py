@@ -3,16 +3,18 @@ from os import _exit as exit
 import sys
 import batch
 import output_generator
+import label
 
 
 def main(argv):
 
     python_version_check()
+    idx = 0
     print("Welcome to the Assembler!")
     if len(argv) == 0:
         print("Interactive Mod!")
         choice = 0
-        while int(choice) != 3:
+        while choice != "3":
             # Interactive Menu
             print("1. Load Lookup Table")
             print("2. Assemble the Instruction")
@@ -21,15 +23,17 @@ def main(argv):
             
             choice = input()
 
-            if int(choice) == 3:
+            if choice == "3":
                 print("You choice exit Bye!")
-            elif int(choice) == 2:
+            elif choice == "2":
                 print("Instruction: ")
                 instruction = input()
-                output_generator.decode(instruction)
+                instruction = label.interactive_detector(instruction, idx)
+                output_generator.decode(instruction, 1)
+                idx = idx + 1
                 if len(output_generator.output) > 0: 
                     print(output_generator.output[-1])
-            elif int(choice) == 1:
+            elif choice == "1":
                 print("To be completed!")
             else:
                 print("Command does not understand!")
