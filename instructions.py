@@ -1,6 +1,7 @@
  # Format: Type, Opcode/Function, operands
 
 instruction_table = {
+    'or' : ['R', '100101', 'd', 's', 't'],
     'add'   : ['R', '100000', 'd', 's', 't'],
     'sll'  : ['R', '000000', 'd', 't', 'i5'],
     'slt'   : ['R', '101010', 'd', 's', 't'],
@@ -17,7 +18,7 @@ instruction_table = {
 
 
 pseudo_table = {
-    'move' : ['add', 't', 's', '$zero']
+    'move' : ['or', 't', 's', '$zero']
 }
 
 if __name__ == "__main__":
