@@ -60,11 +60,21 @@ def decode(instructions):
         # If instruction is real instruction.
         if flag == 1:
             ins_type = instruction_table[instructions[0]]
-        if ins_type[0] == "R":
+            if ins_type[0] == "R":
                 r_type_decoder(instructions, ins_type)
+            elif ins_type[0] == "I":
+                i_type_decoder(instructions, ins_type)
         # If instruction is pseudo instruction.
         elif flag == 2:
             print("Pseudo!")
+        else:
+            print("Instruction could not detected!")
+            print("Please try these instructions or load a look-up table.")
+            print("Your instruction: {}".format(instructions[0]))
+            print("Available instructions: ")
+            print(instruction_table.keys())
+            print("Available pseudo instructions: ")
+            print(pseudo_table.keys())
 
 # Auxiliary function to get rid of commas in the list.
 def get_rid_of_coma(instruction):
@@ -119,7 +129,6 @@ def r_type_decoder(i, ins_type):
 # I-Type Instruction Decoder
 def i_type_decoder(i, ins_type):
     get_rid_of_coma(i)
-    print("To be completed")
     opcode = ins_type[1]
 
     # Check whcih I-Type Instructions
@@ -135,8 +144,14 @@ def i_type_decoder(i, ins_type):
         imm = int(i[3])
         check_imm(imm)
 
-        final = binary_handle.i_type(opcode,s,t,imm)
-        output.append(final)
+    elif ins_type[2] == 't' and ins_type[3] == 'i16(s)':
+        print("lw")
+
+    elif ins_type[2] == 's' and ins_type[3] == 't':
+        print("beq")
+
+    final = binary_handle.i_type(opcode,s,t,imm)
+    output.append(final)
 
 # Auxiliary function to give error if the register not found
 def register_not_found(r):
@@ -156,6 +171,8 @@ def check_shamt(shamt):
         exit(1)
 
  # Auxiliary function to check immediate is in range or not       
+
+# Auxiliary function to check immediate is in range or not
 def check_imm(imm):
     imm_max = (2**15)-1
     imm_min = -(2**15)
