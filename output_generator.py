@@ -13,31 +13,31 @@ def decode(instructions):
     # If Is it batch mode this if block will be executed.
     if type(instructions) is list:
         # Decode the instructions by one by
-        for i in instructions:
+        for idx, item in enumerate(instructions):
             flag = 0
             # Check insruction exist in instruction table.
-            if i[0] in instruction_table:
+            if item[0] in instruction_table:
                 flag = 1
             # Check instruction exist in pseudo instruction table.
-            elif i[0] in pseudo_table:
+            elif item[0] in pseudo_table:
                 flag = 2
             # If the instruction not found set the flag to -1.
             else:
                 flag = -1
             # If instruction is real instruction.
             if flag == 1:
-                ins_type = instruction_table[i[0]]
+                ins_type = instruction_table[item[0]]
                 if ins_type[0] == "R":
-                    r_type_decoder(i, ins_type)
+                    r_type_decoder(item, ins_type)
                 elif ins_type[0] == "I":
-                    i_type_decoder(i, ins_type)
+                    i_type_decoder(item, ins_type)
             # If instruction is pseudo instruction.
             elif flag == 2:
                 print("Pseudo!")
             # If instruction is not found.
             else:
                 # If the Instruction not found, exit.
-                print("{} not found!".format(i[0]))
+                print("{} not found!".format(item[0]))
                 print("Available instructions: ")
                 print(instruction_table.keys())
                 print("Available pseudo instructions: ")
@@ -84,41 +84,41 @@ def get_rid_of_coma(instruction):
         i = i + 1
 
 # R-Type Instruction Decoder
-def r_type_decoder(i, ins_type):
-    get_rid_of_coma(i)
+def r_type_decoder(item, ins_type):
+    get_rid_of_coma(item)
     fun = ins_type[1]
 
     # Check which R-Type Instructions
     if ins_type[2] == "d" and ins_type[3] == "s":
         shamt = '00000'
         try:
-            d = bin(register_table[i[1]])
+            d = bin(register_table[item[1]])
         except KeyboardInterrupt:
-            register_not_found(i[1])
+            register_not_found(item[1])
         try:
-            s = bin(register_table[i[2]])
+            s = bin(register_table[item[2]])
         except KeyboardInterrupt:
-            register_not_found(i[2])
+            register_not_found(item[2])
         try:
-            t = bin(register_table[i[3]])
+            t = bin(register_table[item[3]])
         except KeyboardInterrupt:
-            register_not_found(i[3])
+            register_not_found(item[3])
     elif ins_type[2] == "d" and ins_type[3] == "t":
         try:
-            d = bin(register_table[i[1]])
+            d = bin(register_table[item[1]])
         except KeyboardInterrupt:
-            register_not_found(i[1])
+            register_not_found(item[1])
         try:
-            t = bin(register_table[i[2]])
+            t = bin(register_table[item[2]])
         except KeyboardInterrupt:
-            register_not_found(i[2])
-        shamt = bin(int(i[3]))
+            register_not_found(item[2])
+        shamt = bin(int(item[3]))
         s = '00000'
     elif ins_type[2] == "s":
         try:
-            s = bin(register_table[i[1]])
+            s = bin(register_table[item[1]])
         except KeyboardInterrupt:
-            register_not_found(i[1])
+            register_not_found(item[1])
         t = '00000'
         d = '00000'
         shamt = '00000'
@@ -127,21 +127,21 @@ def r_type_decoder(i, ins_type):
     output.append(final)
 
 # I-Type Instruction Decoder
-def i_type_decoder(i, ins_type):
-    get_rid_of_coma(i)
+def i_type_decoder(item, ins_type):
+    get_rid_of_coma(item)
     opcode = ins_type[1]
 
     # Check whcih I-Type Instructions
     if ins_type[2] == 't' and ins_type[3] == 's':
         try:
-            t = bin(register_table[i[1]])
+            t = bin(register_table[item[1]])
         except KeyboardInterrupt:
-            register_not_found(i[1])
+            register_not_found(item[1])
         try:
-            s = bin(register_table[i[2]])
+            s = bin(register_table[item[2]])
         except KeyboardInterrupt:
-            register_not_found(i[1])
-        imm = int(i[3])
+            register_not_found(item[1])
+        imm = int(item[3])
         check_imm(imm)
 
     elif ins_type[2] == 't' and ins_type[3] == 'i16(s)':
