@@ -31,6 +31,12 @@ def decode(instructions):
                     r_type_decoder(item, ins_type)
                 elif ins_type[0] == "I":
                     i_type_decoder(item, ins_type, idx)
+                elif ins_type[0] == "J":
+                    j_type_decoder(item, ins_type, idx)
+                else:
+                    print("Instruction type could not detected!")
+                    print("Exiting...")
+                    exit(1)
             # If instruction is pseudo instruction.
             elif flag == 2:
                 print("Pseudo!")
@@ -64,6 +70,12 @@ def decode(instructions):
                 r_type_decoder(instructions, ins_type)
             elif ins_type[0] == "I":
                 i_type_decoder(instructions, ins_type, 0)
+            elif ins_type[0] == "J":
+                j_type_decoder(item, ins_type, idx)
+            else:
+                print("Instruction type could not detected!")
+                print("Exiting...")
+                exit(1)
         # If instruction is pseudo instruction.
         elif flag == 2:
             print("Pseudo!")
@@ -173,6 +185,15 @@ def i_type_decoder(item, ins_type, idx):
     final = binary_handle.i_type(opcode,s,t,imm)
     output.append(final)
 
+# J-Type Instruction Decoder
+def j_type_decoder(item, ins_type, idx):
+    get_rid_of_coma(item)
+    opcode = ins_type[1]
+    label = item[1]
+    label_adress = jump_label_handle(label,idx)
+    final = binary_handle.j_type(opcode,label_adress)
+    output.append(final)
+
 # Auxiliary function to give error if the register not found
 def register_not_found(r):
     print("Register {} not found!".format(r))
@@ -217,6 +238,27 @@ def branch_label_handle(label, idx):
         # Calculate label adress
         label_number = int((label_adress - real_pc) / 4)
         return label_number
+    else:
+        print("Label not found!")
+        print("Your label is {}".format(label))
+        print("Available lable(s) are: ")
+        print(label_list.keys())
+        exit(1)
+
+# Auxiliary function to handle jump label
+def jump_label_handle(label, idx):
+    # Started location.
+    pc = "0x80001000"
+    # Check label is avialable or not.
+    if label in label_list:
+        # Get Available position of label.
+        id = label_list[label]
+        # Calculate label adress
+        label_adress = bin(int(pc,16) + 4*(id))
+        label_adress = label_adress.replace("0b","")
+        # Get rid of first 4 and last 2 bits.
+        label_adress = label_adress[4:-2]
+        return label_adress
     else:
         print("Label not found!")
         print("Your label is {}".format(label))
