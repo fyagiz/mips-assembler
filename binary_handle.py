@@ -67,6 +67,14 @@ def i_type(opcode,s,t,imm):
     final = last_check(final)
     return final
 
+# Check J-Type Instructions Bits and Convert to He
+def j_type(opcode,label_adress):
+    final = opcode + label_adress
+    final = int(final,2)
+    final = hex(final).replace("0x", "")
+    final = last_check(final)
+    return final
+    
 # To take Two's Complement
 def twos_complement(imm, bit_length):
     imm_list = list(imm)
