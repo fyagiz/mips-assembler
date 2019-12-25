@@ -27,7 +27,8 @@ def main(argv):
                 print("Instruction: ")
                 instruction = input()
                 output_generator.decode(instruction)
-                print(output_generator.output[-1])
+                if len(output_generator.output) > 0: 
+                    print(output_generator.output[-1])
             elif int(choice) == 1:
                 print("To be completed!")
             else:
