@@ -4,6 +4,7 @@ import sys
 import batch
 import output_generator
 import label
+import lookup_handle
 
 
 def main(argv):
@@ -16,8 +17,8 @@ def main(argv):
         choice = 0
         while choice != "3":
             # Interactive Menu
-            print("1. Load Lookup Table")
-            print("2. Assemble the Instruction")
+            print("1. Assemble the Instruction")
+            print("2. Load Lookup Table")
             print("3. Exit")
             print("Choice: ", end="")
             
@@ -25,16 +26,19 @@ def main(argv):
 
             if choice == "3":
                 print("You choice exit Bye!")
-            elif choice == "2":
+            elif choice == "1":
                 print("Instruction: ")
                 instruction = input()
                 instruction = label.interactive_detector(instruction, idx)
-                output_generator.decode(instruction, 1)
+                output_generator.decode(instruction, idx)
                 idx = idx + 1
                 if len(output_generator.output) > 0: 
                     print(output_generator.output[-1])
-            elif choice == "1":
-                print("To be completed!")
+            elif choice == "2":
+                print("Look-up Table Directory: ", end="")
+                file_name = input()
+                lookup_handle.lookup_table_handler(file_name)
+                
             else:
                 print("Command does not understand!")
     else:

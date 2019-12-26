@@ -20,7 +20,7 @@ def batch_mode(file_name):
     # Detext Labels
     label.detector(instructions)
     # Generate Outputs
-    output_generator.decode(instructions,0)
+    output_generator.decode(instructions,-1)
     
     for i in output_generator.output:
         print(i)

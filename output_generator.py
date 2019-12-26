@@ -11,7 +11,7 @@ def decode(instructions, mod):
 
     # Check the assembler start batch mod or not.
     # If Is it batch mode this if block will be executed.
-    if mod == 0:
+    if mod == -1:
         # Decode the instructions by one by
         for idx, item in enumerate(instructions):
             flag = 0
@@ -70,7 +70,7 @@ def decode(instructions, mod):
             if ins_type[0] == "R":
                 r_type_decoder(instructions, ins_type)
             elif ins_type[0] == "I":
-                i_type_decoder(instructions, ins_type, 0)
+                i_type_decoder(instructions, ins_type, mod)
             elif ins_type[0] == "J":
                 j_type_decoder(item, ins_type, idx)
             else:
@@ -273,5 +273,6 @@ def pseudo_handle(item, ins_type, idx):
         temp = 'or'+" "+item[1]+" "+item[2]+", "+"$zero"
         temp = temp.split(" ")
         r_type_decoder(temp,ins_type)
+        
 if __name__ == "__main__":
     print("Please start assembler.py to start assembler!")
