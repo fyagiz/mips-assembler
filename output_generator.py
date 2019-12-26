@@ -127,7 +127,7 @@ def r_type_decoder(item, ins_type):
             register_not_found(item[2])
         shamt = bin(int(item[3]))
         s = '00000'
-    elif ins_type[2] == "s":
+    elif ins_type[2] == "s" and len(ins_type) != 4:
         try:
             s = bin(register_table[item[1]])
         except KeyboardInterrupt:
@@ -136,6 +136,17 @@ def r_type_decoder(item, ins_type):
         d = '00000'
         shamt = '00000'
         fun = '001000'
+    else:
+        try:
+            s = bin(register_table[item[1]])
+        except KeyboardInterrupt:
+            register_not_found(item[1])
+        try:
+            t = bin(register_table[item[2]])
+        except KeyboardInterrupt:
+            register_not_found(item[2])
+        d = '00000'
+        shamt = '00000'
     final = binary_handle.r_type(s,t,d,shamt,fun)
     output.append(final)
 
@@ -181,6 +192,15 @@ def i_type_decoder(item, ins_type, idx):
         except KeyboardInterrupt:
             register_not_found(item[2])
         imm = branch_label_handle(item[3], idx)
+        check_imm(imm)
+    else:
+        try:
+            s = bin(register_table[item[1]])
+        except KeyboardInterrupt:
+            register_not_found(item[1])
+        t = int(ins_type[3])
+        t = bin(t)
+        imm = branch_label_handle(item[2], idx)
         check_imm(imm)
 
     final = binary_handle.i_type(opcode,s,t,imm)
