@@ -21,9 +21,10 @@ def batch_mode(file_name):
     label.detector(instructions)
     # Generate Outputs
     output_generator.decode(instructions,-1)
-    
+    f= open("output.obj","w+")
     for i in output_generator.output:
-        print(i)
+        f.write("{}\n".format(i))
+    f.close
 
 if __name__ == "__main__":
     print("Please start assembler.py to start assembler!")
