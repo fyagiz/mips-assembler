@@ -43,6 +43,8 @@ def main(argv):
                 print("Command does not understand!")
     else:
         print("Batch Mod Started!")
+        if (len(argv) > 1):
+            lookup_handle.lookup_table_handler(argv[1])
         batch.batch_mode(argv[0])
 
 # To check Pyton version.
