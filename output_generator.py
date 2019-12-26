@@ -79,7 +79,9 @@ def decode(instructions, mod):
                 exit(1)
         # If instruction is pseudo instruction.
         elif flag == 2:
-            print("Pseudo!")
+            ins_type = pseudo_table[item[0]]
+            ins_type = instruction_table[ins_type[0]]
+            pseudo_handle(item, ins_type, idx)
         else:
             print("Instruction could not detected!")
             print("Please try these instructions or load a look-up table.")
